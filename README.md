@@ -1,6 +1,9 @@
 # ClaimGraph.github.io
 
-The public Astro marketing site for **ClaimGraph**.
+The public Astro marketing site for **ClaimGraph**. Its canonical URL is
+`https://claimgraph.us`; Cloudflare owns DNS and GitHub Pages serves the static
+artifact. `public/CNAME` keeps the deployed artifact and the Pages setting on
+the same custom domain.
 
 Private-by-default evidence intelligence with immutable originals, provenance, redaction, and professional review.
 

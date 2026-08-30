@@ -1,7 +1,7 @@
 // @ts-check
 import { defineConfig } from "astro/config";
 
-const site = process.env.PUBLIC_SITE_URL ?? "https://claimgraph.github.io";
+const site = process.env.PUBLIC_SITE_URL ?? "https://claimgraph.us";
 
 export default defineConfig({
   site,
