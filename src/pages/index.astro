@@ -64,6 +64,18 @@ const visualItems = [
     "linked"
   ]
 ];
+const audiences = [
+  {
+    label: "Individual",
+    compactLabel: "User",
+    href: "https://user.claimgraph.us/"
+  },
+  {
+    label: "Organization",
+    compactLabel: "Org",
+    href: "https://org.claimgraph.us/"
+  }
+];
 const canonical = new URL(Astro.url.pathname, Astro.site ?? "https://claimgraph.github.io");
 ---
 
@@ -94,11 +106,23 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? "https://claimgraph.
           <span class="mark">{site.mark}</span>
           <span>{site.title}</span>
         </a>
-        <nav aria-label="Primary navigation">
-          <a href="#principles">Principles</a>
-          <a href="#method">Method</a>
-          <a href={`https://github.com/${site.org}`}>GitHub <span aria-hidden="true">↗</span></a>
-        </nav>
+        <div class="header-navigation">
+          <nav class="site-nav" aria-label="Primary navigation">
+            <a href="#principles">Principles</a>
+            <a href="#method">Method</a>
+            <a href={`https://github.com/${site.org}`}>GitHub <span aria-hidden="true">↗</span></a>
+          </nav>
+          <nav class="audience-switcher" aria-label="Open ClaimGraph application">
+            <span class="audience-label">Open as</span>
+            {audiences.map(({ label, compactLabel, href }) => (
+              <a href={href} aria-label={`Open the ClaimGraph ${label.toLowerCase()} application`}>
+                <span class="audience-full">{label}</span>
+                <span class="audience-compact" aria-hidden="true">{compactLabel}</span>
+                <span aria-hidden="true">↗</span>
+              </a>
+            ))}
+          </nav>
+        </div>
       </header>
 
       <section class="hero" aria-labelledby="headline">
@@ -201,18 +225,34 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? "https://claimgraph.
     --sans: "Avenir Next", Avenir, "Segoe UI", sans-serif;
     --serif: Iowan Old Style, "Palatino Linotype", Palatino, Georgia, serif;
     --mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
-    min-height: 100vh; overflow: hidden; background: var(--paper); color: var(--ink);
+    min-height: 100vh; overflow: clip; background: var(--paper); color: var(--ink);
     font-family: var(--sans);
   }
   .masthead {
+    position: sticky; top: 0; z-index: 10;
     min-height: 5.5rem; display: flex; align-items: center; justify-content: space-between;
-    gap: 2rem; padding: 0 4vw; border-bottom: 1px solid var(--rule);
+    gap: 2rem; padding: .85rem 4vw; border-bottom: 1px solid var(--rule);
+    background: color-mix(in srgb, var(--paper) 92%, transparent);
+    backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
   }
   .identity { display: inline-flex; align-items: center; gap: .9rem; text-decoration: none; font-weight: 650; letter-spacing: -.02em; }
   .mark { font-family: var(--mono); font-size: .7rem; letter-spacing: .08em; color: var(--accent); }
-  nav { display: flex; gap: clamp(1rem, 3vw, 2.5rem); font-family: var(--mono); font-size: .68rem; text-transform: uppercase; letter-spacing: .08em; }
-  nav a { text-decoration: none; padding: .7rem 0; border-bottom: 1px solid transparent; }
-  nav a:hover { border-color: var(--accent); }
+  .header-navigation { display: flex; align-items: center; justify-content: flex-end; gap: clamp(1rem, 2.5vw, 2.5rem); }
+  .site-nav { display: flex; gap: clamp(.8rem, 2vw, 2rem); font-family: var(--mono); font-size: .68rem; text-transform: uppercase; letter-spacing: .08em; }
+  .site-nav a { text-decoration: none; padding: .7rem 0; border-bottom: 1px solid transparent; }
+  .site-nav a:hover { border-color: var(--accent); }
+  .audience-switcher {
+    display: flex; align-items: stretch; border: 1px solid var(--rule);
+    font: 700 .64rem/1 var(--mono); letter-spacing: .07em; text-transform: uppercase;
+  }
+  .audience-label { display: inline-flex; align-items: center; padding: 0 .8rem; color: var(--muted); white-space: nowrap; }
+  .audience-switcher a {
+    display: inline-flex; min-height: 2.55rem; align-items: center; justify-content: center; gap: .45rem;
+    padding: .75rem .85rem; border-left: 1px solid var(--rule); text-decoration: none; white-space: nowrap;
+    transition: background-color 140ms ease, color 140ms ease;
+  }
+  .audience-switcher a:hover { background: var(--accent); color: var(--paper); }
+  .audience-compact { display: none; }
   .hero {
     display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(18rem, .85fr);
     min-height: 42rem; border-bottom: 1px solid var(--rule);
@@ -323,6 +363,11 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? "https://claimgraph.
   }
   footer span:last-child { text-align: right; }
   @media (max-width: 900px) {
+    .masthead { align-items: flex-start; }
+    .header-navigation { flex-direction: column-reverse; align-items: flex-end; gap: .4rem; }
+    .audience-label { display: none; }
+    .audience-switcher a:first-of-type { border-left: 0; }
+    .site-nav { gap: 1.25rem; }
     .hero { grid-template-columns: 1fr; }
     .hero-copy { border-right: 0; border-bottom: 1px solid var(--rule); }
     .instrument { width: min(38rem, calc(100% - 8vw)); justify-self: center; }
@@ -331,8 +376,14 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? "https://claimgraph.
     .principle-list article { min-height: auto; }
   }
   @media (max-width: 680px) {
-    .masthead { align-items: flex-start; padding-block: 1.3rem; }
-    nav { flex-direction: column; gap: .25rem; align-items: flex-end; }
+    .masthead { display: grid; grid-template-columns: 1fr; gap: .7rem; padding-block: .85rem; }
+    .header-navigation { width: 100%; display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: .75rem; }
+    .site-nav { gap: .9rem; font-size: .59rem; }
+    .site-nav a { padding: .45rem 0; }
+    .audience-switcher { width: 100%; }
+    .audience-switcher a { flex: 1; min-width: 0; padding-inline: .5rem; }
+    .audience-full { display: none; }
+    .audience-compact { display: inline; }
     .hero { min-height: 0; }
     .hero-copy { padding: 4.5rem 4vw; }
     h1 { font-size: clamp(2.9rem, 15vw, 5rem); }
