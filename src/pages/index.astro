@@ -66,16 +66,51 @@ const visualItems = [
 ];
 const audiences = [
   {
-    label: "Individual",
-    compactLabel: "User",
-    href: "https://user.claimgraph.us/"
+    label: "Claimant",
+    compactLabel: "Claimant",
+    href: "https://user.claimgraph.us/login/"
   },
   {
-    label: "Organization",
-    compactLabel: "Org",
-    href: "https://org.claimgraph.us/"
+    label: "Law firm",
+    compactLabel: "Firm",
+    href: "https://org.claimgraph.us/login/"
   }
 ];
+const onboardingJourneys = [
+  {
+    kind: "INDIVIDUAL / CLAIMANT",
+    title: "Document what happened without giving up control.",
+    summary: "Create a private workspace, preserve source material, and decide when a verified legal professional may review it.",
+    loginHref: "https://user.claimgraph.us/login/",
+    loginLabel: "Claimant log in",
+    onboardingHref: "https://user.claimgraph.us/onboarding/",
+    onboardingLabel: "Start a private claim",
+    steps: [
+      "Verify your identity and recovery methods through Shared Auth.",
+      "Describe the incident with a guided, conditional intake.",
+      "Upload originals directly to protected evidence storage.",
+      "Review provenance, consent, access, and submission status."
+    ],
+    note: "Payment can only add submission capacity. It never changes credibility, ranking, review priority, or lawyer visibility."
+  },
+  {
+    kind: "ORGANIZATION / LAW FIRM",
+    title: "Build a verified matter workspace for the whole team.",
+    summary: "Establish the firm, verify counsel, assign least-privilege roles, and review only the matters and cohorts your organization is authorized to access.",
+    loginHref: "https://org.claimgraph.us/login/",
+    loginLabel: "Law-firm log in",
+    onboardingHref: "https://org.claimgraph.us/onboarding/",
+    onboardingLabel: "Verify a law firm",
+    steps: [
+      "Verify the organization and an accountable legal professional.",
+      "Invite partners, associates, paralegals, and auditors by role.",
+      "Create or join matters with explicit assignment boundaries.",
+      "Search, cluster, review, and export with attributable evidence."
+    ],
+    note: "Shared Auth proves identity and assurance. ClaimGraph still enforces product roles, matter grants, tenant isolation, and auditable access."
+  }
+];
+const supportHref = "https://chatbot.claimgraph.us/";
 const canonical = new URL(Astro.url.pathname, Astro.site ?? "https://claimgraph.github.io");
 ---
 
@@ -110,8 +145,21 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? "https://claimgraph.
           <nav class="site-nav fleet-desktop-nav" aria-label="Primary navigation">
             <a href="#principles">Principles</a>
             <a href="#method">Method</a>
+            <a href="#access">Onboarding</a>
             <a href={`https://github.com/${site.org}`}>GitHub <span aria-hidden="true">↗</span></a>
-          <a href="#access">Access</a><a href="https://user.claimgraph.github.io/">Log in</a><a href="https://auth.claimgraph.github.io/">Sign up</a></nav><details class="fleet-mobile-nav"><summary>Menu</summary><nav aria-label="Mobile navigation"><a href="#access">Access</a><a href="https://user.claimgraph.github.io/">User log in</a><a href="https://org.claimgraph.github.io/">Organization access</a><a href="https://auth.claimgraph.github.io/">Sign up</a><a href="https://github.com/ClaimGraph">Source</a></nav></details>
+            <a href={supportHref}>Support <span aria-hidden="true">↗</span></a>
+          </nav>
+          <details class="fleet-mobile-nav">
+            <summary>Menu</summary>
+            <nav aria-label="Mobile navigation">
+              <a href="#access">Choose an onboarding path</a>
+              <a href="https://user.claimgraph.us/login/">Claimant log in</a>
+              <a href="https://org.claimgraph.us/login/">Law-firm log in</a>
+              <a href="https://auth.claimgraph.us/">Shared Auth</a>
+              <a href={supportHref}>Public support</a>
+              <a href="https://github.com/ClaimGraph">Source</a>
+            </nav>
+          </details>
           <nav class="audience-switcher" aria-label="Open ClaimGraph application">
             <span class="audience-label">Open as</span>
             {audiences.map(({ label, compactLabel, href }) => (
@@ -131,8 +179,8 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? "https://claimgraph.
           <h1 id="headline">Evidence that keeps its history.</h1>
           <p class="introduction">Case material changes form as it is ingested, extracted, redacted, related, and cited. ClaimGraph preserves immutable originals and records every derivative so a professional can inspect how an assertion reached the page.</p>
           <div class="hero-actions">
-            <a class="primary-link" href={`https://github.com/${site.org}`}>Inspect the evidence model <span aria-hidden="true">↗</span></a>
-            <a class="text-link" href="#principles">Read the premise <span aria-hidden="true">↓</span></a>
+            <a class="primary-link" href="#access">Choose your onboarding path <span aria-hidden="true">↓</span></a>
+            <a class="text-link" href={`https://github.com/${site.org}`}>Inspect the evidence model <span aria-hidden="true">↗</span></a>
           </div>
         </div>
 
@@ -195,6 +243,45 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? "https://claimgraph.
         </ol>
       </section>
 
+      <section class="onboarding" id="access" aria-labelledby="access-title">
+        <div class="section-heading onboarding-heading">
+          <p class="section-number">03 / ACCESS</p>
+          <h2 id="access-title">One platform. Two accountable entrances.</h2>
+          <p>ClaimGraph keeps public information on this site and sends authenticated work to a purpose-specific application. Claimants never enter through an admin or law-firm session, and organization access never falls back to an individual identity.</p>
+        </div>
+        <div class="journey-grid">
+          {onboardingJourneys.map((journey) => (
+            <article class="journey-card">
+              <p class="journey-kind">{journey.kind}</p>
+              <h3>{journey.title}</h3>
+              <p class="journey-summary">{journey.summary}</p>
+              <ol>
+                {journey.steps.map((step, index) => (
+                  <li>
+                    <span>{String(index + 1).padStart(2, "0")}</span>
+                    <p>{step}</p>
+                  </li>
+                ))}
+              </ol>
+              <p class="journey-note">{journey.note}</p>
+              <div class="journey-actions">
+                <a class="primary-link" href={journey.onboardingHref}>{journey.onboardingLabel} <span aria-hidden="true">↗</span></a>
+                <a class="text-link" href={journey.loginHref}>{journey.loginLabel} <span aria-hidden="true">↗</span></a>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <aside class="support-strip" aria-labelledby="support-title">
+        <div>
+          <p class="section-number">ORES CHAT / PUBLIC SUPPORT</p>
+          <h2 id="support-title">Questions about intake or access?</h2>
+          <p>Public support can explain how ClaimGraph works using allowlisted public context. It cannot view private reports, provide legal advice, or make decisions about a claim.</p>
+        </div>
+        <a class="primary-link" href={supportHref}>Open public support <span aria-hidden="true">↗</span></a>
+      </aside>
+
       <section class="closing" aria-label="Closing statement">
         <p>The graph can reveal relationships. The accountable human makes the claim.</p>
         <a href={`https://github.com/${site.org}`}>github.com/{site.org} <span aria-hidden="true">↗</span></a>
@@ -202,11 +289,9 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? "https://claimgraph.
 
       <footer>
         <span>{site.mark}</span>
-        <span>Built in the open with Astro.</span>
+        <span><a href={supportHref}>Public support</a> · <a href="https://auth.claimgraph.us/">Shared Auth</a></span>
         <span>{new Date().getFullYear()}</span>
       </footer>
-
-<section class="fleet-access" id="access" aria-labelledby="fleet-access-title"><div class="fleet-access-head"><p class="fleet-access-kicker">Product access</p><h2 id="fleet-access-title">Public context here. Account work in the right application.</h2><p class="fleet-access-intro">ClaimGraph's marketing site remains public. Authenticated claim research, evidence review, and argument analysis is separated into individual, organization, and account-creation boundaries.</p></div><div class="fleet-access-grid"><article><span>INDIVIDUAL</span><h3>Your workspace</h3><p>Return to personal activity, saved context, and work owned by your account.</p><a href="https://user.claimgraph.github.io/">User log in ↗</a></article><article><span>ORGANIZATION</span><h3>Team operations</h3><p>Open shared membership, policy, and organization-scoped work.</p><a href="https://org.claimgraph.github.io/">Organization access ↗</a></article><article><span>SHARED AUTH</span><h3>Create an account</h3><p>Start through the dedicated authentication boundary before entering the product.</p><a href="https://auth.claimgraph.github.io/">Sign up ↗</a></article></div></section>
 </main>
   </body>
 </html>
@@ -355,6 +440,33 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? "https://claimgraph.
   .method li:last-child { border-bottom: 0; }
   .method li > span { color: var(--accent); font: .7rem/1 var(--mono); padding-top: .2rem; }
   .method h3 { margin: 0 0 .65rem; }
+  .onboarding { border-bottom: 1px solid var(--rule); }
+  .onboarding-heading {
+    display: grid; grid-template-columns: minmax(14rem, .55fr) minmax(0, 1.45fr);
+    column-gap: clamp(2rem, 7vw, 8rem); border-right: 0; border-bottom: 1px solid var(--rule);
+  }
+  .onboarding-heading h2 { max-width: 13ch; }
+  .onboarding-heading > p:last-child { max-width: 48rem; margin: 3.1rem 0 0; color: var(--muted); line-height: 1.7; }
+  .journey-grid { display: grid; grid-template-columns: repeat(2, 1fr); }
+  .journey-card { min-width: 0; padding: clamp(2.5rem, 5vw, 5rem) 4vw; }
+  .journey-card + .journey-card { border-left: 1px solid var(--rule); }
+  .journey-kind { margin: 0; color: var(--accent); font: 700 .68rem/1.4 var(--mono); letter-spacing: .12em; }
+  .journey-card h3 { max-width: 18ch; margin: 1.25rem 0; font: 450 clamp(1.75rem, 3vw, 3rem)/1.06 var(--serif); letter-spacing: -.035em; }
+  .journey-summary { max-width: 42rem; margin: 0; color: var(--muted); line-height: 1.7; }
+  .journey-card ol { list-style: none; margin: 2rem 0; padding: 0; border-top: 1px solid var(--rule); }
+  .journey-card li { display: grid; grid-template-columns: 3rem 1fr; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid var(--rule); }
+  .journey-card li span { color: var(--accent); font: .68rem/1.6 var(--mono); }
+  .journey-card li p { margin: 0; line-height: 1.55; }
+  .journey-note { margin: 0; padding: 1rem; border-left: 2px solid var(--accent); color: var(--muted); font-size: .9rem; line-height: 1.6; }
+  .journey-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 1.25rem; margin-top: 2rem; }
+  .support-strip {
+    display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 2rem;
+    padding: clamp(3rem, 6vw, 5rem) 4vw; border-bottom: 1px solid var(--rule);
+    background: color-mix(in srgb, var(--accent) 8%, var(--paper));
+  }
+  .support-strip .section-number { margin-bottom: 1rem; }
+  .support-strip h2 { margin: 0; font: 450 clamp(1.8rem, 3vw, 3.2rem)/1 var(--serif); letter-spacing: -.04em; }
+  .support-strip p:last-child { max-width: 50rem; margin: 1rem 0 0; color: var(--muted); line-height: 1.65; }
   .closing { padding: clamp(5rem, 10vw, 10rem) 4vw 4rem; }
   .closing p { max-width: 23ch; margin: 0 0 4rem; font: 400 clamp(2.25rem, 5vw, 5.5rem)/.98 var(--serif); letter-spacing: -.05em; }
   .closing a { font: .72rem/1 var(--mono); text-underline-offset: .35rem; }
@@ -376,6 +488,10 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? "https://claimgraph.
     .principles, .method { grid-template-columns: 1fr; }
     .section-heading { border-right: 0; border-bottom: 1px solid var(--rule); }
     .principle-list article { min-height: auto; }
+    .onboarding-heading { grid-template-columns: 1fr; }
+    .onboarding-heading > p:last-child { margin-top: 1.5rem; }
+    .journey-grid { grid-template-columns: 1fr; }
+    .journey-card + .journey-card { border-left: 0; border-top: 1px solid var(--rule); }
   }
   @media (max-width: 680px) {
     .masthead { display: grid; grid-template-columns: 1fr; gap: .7rem; padding-block: .85rem; }
@@ -394,6 +510,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? "https://claimgraph.
     .principle-list { grid-template-columns: 1fr; }
     .principle-list article { border-right: 0; border-bottom: 1px solid var(--rule); padding: 2.5rem 4vw; }
     .principle-list article:last-child { border-bottom: 0; }
+    .support-strip { grid-template-columns: 1fr; align-items: start; }
     footer { grid-template-columns: 1fr; }
     footer span:last-child { text-align: left; }
   }
@@ -413,23 +530,5 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? "https://claimgraph.
   @media (max-width: 760px) {
     .fleet-desktop-nav { display: none !important; }
     .fleet-mobile-nav { display: block; }
-  }
-</style>
-
-<style>
-  .fleet-access { padding: clamp(3.5rem, 8vw, 7rem) max(4vw, calc((100% - 76rem) / 2)); border-block: 1px solid currentColor; }
-  .fleet-access-head { max-width: 48rem; }
-  .fleet-access-kicker { margin: 0 0 .8rem; font: 750 .72rem/1.4 ui-monospace, monospace; letter-spacing: .12em; text-transform: uppercase; opacity: .7; }
-  .fleet-access h2 { margin: 0; font-size: clamp(2rem, 4vw, 4rem); line-height: 1.02; letter-spacing: -.04em; text-wrap: balance; }
-  .fleet-access-intro { max-width: 46rem; margin: 1.25rem 0 0; font-size: 1.05rem; line-height: 1.7; opacity: .78; }
-  .fleet-access-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 2.5rem; }
-  .fleet-access-grid article { padding: 1.5rem; border: 1px solid currentColor; border-radius: .8rem; }
-  .fleet-access-grid span { font: 750 .68rem/1 ui-monospace, monospace; letter-spacing: .1em; opacity: .66; }
-  .fleet-access-grid h3 { margin: 1.5rem 0 .65rem; font-size: 1.15rem; }
-  .fleet-access-grid p { min-height: 4.8rem; margin: 0 0 1.25rem; line-height: 1.55; opacity: .76; }
-  .fleet-access-grid a { font-weight: 750; color: inherit; text-underline-offset: .25rem; }
-  @media (max-width: 760px) {
-    .fleet-access-grid { grid-template-columns: 1fr; }
-    .fleet-access-grid p { min-height: 0; }
   }
 </style>
