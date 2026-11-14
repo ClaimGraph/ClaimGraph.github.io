@@ -22,3 +22,9 @@ Astro writes the production site to `dist/`. The committed GitHub Actions workfl
 ## Content standard
 
 Public claims must remain traceable to the organization's repositories, documentation, or planning context. Do not publish credentials, customer data, private operational details, or unreviewed legal language from this public repository.
+
+## Public process explainer
+
+The `/how-it-works/` route describes original preservation, attributable
+derivatives, professional review, and the limits of automated conclusions. It
+uses public-facing language and does not expose private contracts or customer data.
