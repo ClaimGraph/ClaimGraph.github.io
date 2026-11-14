@@ -1,0 +1,49 @@
+---
+const canonical = new URL(Astro.url.pathname, Astro.site ?? "https://claimgraph.us");
+const steps = [
+  ["Preserve", "Register original material without rewriting it when later processing produces derivatives."],
+  ["Derive", "Create attributable transformations such as OCR or redaction, linked to their source and processing recipe."],
+  ["Review", "Give qualified professionals the provenance and counter-testimony context needed for independent judgment."],
+];
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content="How ClaimGraph separates immutable source evidence, derived material, and human review." />
+    <link rel="canonical" href={canonical} />
+    <title>How it works — ClaimGraph</title>
+    <style>
+      :root { color-scheme: dark; font-family: system-ui, sans-serif; background: #131716; color: #eee9dc; }
+      body { max-width: 58rem; margin: 0 auto; padding: 2rem clamp(1rem, 5vw, 3rem) 5rem; line-height: 1.65; }
+      a { color: #dbc28a; } a:focus-visible { outline: 3px solid #8bdbff; outline-offset: 4px; }
+      h1 { line-height: 1.2; font-size: clamp(2rem, 5vw, 3.5rem); }
+      section { border-top: 1px solid #47554c; padding: 1.25rem 0; }
+      .eyebrow { color: #dbc28a; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; }
+      .skip { position: absolute; left: -10000px; } .skip:focus { position: static; }
+    </style>
+  </head>
+  <body>
+    <a href="#main" class="skip">Skip to content</a>
+    <header><a href="/">← ClaimGraph home</a></header>
+    <main id="main">
+      <p class="eyebrow">Evidence process</p>
+      <h1>Evidence that can be examined, not just summarized.</h1>
+      <p>ClaimGraph is designed to preserve source history and make downstream
+      transformations traceable. It does not determine whether a claim is true.</p>
+      <ol>
+        {steps.map(([title, description]) => (
+          <li><section><h2>{title}</h2><p>{description}</p></section></li>
+        ))}
+      </ol>
+      <section aria-labelledby="limits">
+        <h2 id="limits">What the system does not do</h2>
+        <p>Payment does not determine credibility, moderation, or ranking. A
+        correction adds a version rather than silently replacing the original.
+        Access to private evidence requires authorization and is not granted by
+        this public website.</p>
+      </section>
+    </main>
+  </body>
+</html>

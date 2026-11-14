@@ -110,8 +110,9 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? "https://claimgraph.
           <nav class="site-nav fleet-desktop-nav" aria-label="Primary navigation">
             <a href="#principles">Principles</a>
             <a href="#method">Method</a>
+            <a href="/how-it-works/">How it works</a>
             <a href={`https://github.com/${site.org}`}>GitHub <span aria-hidden="true">↗</span></a>
-          <a href="#access">Access</a><a href="https://user.claimgraph.github.io/">Log in</a><a href="https://auth.claimgraph.github.io/">Sign up</a></nav><details class="fleet-mobile-nav"><summary>Menu</summary><nav aria-label="Mobile navigation"><a href="#access">Access</a><a href="https://user.claimgraph.github.io/">User log in</a><a href="https://org.claimgraph.github.io/">Organization access</a><a href="https://auth.claimgraph.github.io/">Sign up</a><a href="https://github.com/ClaimGraph">Source</a></nav></details>
+          <a href="#access">Access</a><a href="https://user.claimgraph.github.io/">Log in</a><a href="https://auth.claimgraph.github.io/">Sign up</a></nav><details class="fleet-mobile-nav"><summary>Menu</summary><nav aria-label="Mobile navigation"><a href="/how-it-works/">How it works</a><a href="#access">Access</a><a href="https://user.claimgraph.github.io/">User log in</a><a href="https://org.claimgraph.github.io/">Organization access</a><a href="https://auth.claimgraph.github.io/">Sign up</a><a href="https://github.com/ClaimGraph">Source</a></nav></details>
           <nav class="audience-switcher" aria-label="Open ClaimGraph application">
             <span class="audience-label">Open as</span>
             {audiences.map(({ label, compactLabel, href }) => (
