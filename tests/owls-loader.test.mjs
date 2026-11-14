@@ -64,3 +64,14 @@ test('the static build contains the injected loader URL and app identity', async
   assert.match(output, /owls\/marketing-loader\.mjs/);
   assert.match(output, /ores\.wasm-loader\.marketing\.bootstrap\.v1/);
 });
+
+test('public method explainer is discoverable and does not promise truth verdicts', async () => {
+  const homepage = await source('src/pages/index.astro');
+  const explainer = await source('src/pages/how-it-works.astro');
+  assert.match(homepage, /href="\/how-it-works\/"/);
+  for (const word of ['Preserve', 'Derive', 'Review', 'correction', 'Payment']) {
+    assert.ok(explainer.includes(word));
+  }
+  assert.match(explainer, /does not determine whether a claim is true/);
+  assert.match(explainer, /<main id="main">/);
+});
